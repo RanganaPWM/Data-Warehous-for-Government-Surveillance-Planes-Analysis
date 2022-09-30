@@ -1,0 +1,90 @@
+drop table if exists Fact_Aircraft_Tracking;
+create table Fact_Aircraft_Tracking(
+	Flight_id nvarchar(50),
+	adshex_key int foreign key references Dim_Aircraft_Data(Aircraft_sk),
+	Latitude float,
+	Altitude int,
+	Speed int,
+	Track int,
+	Squawk int,
+	Agency_key int foreign key references Dim_Agency(Agency_sk),
+	Times_tamp datetime,
+	Date_key int foreign key references Dim_Date(DateKey),
+	Altitude_In_Meters decimal(18, 2),
+	Speed_in_kmph decimal(18, 2),
+	Insert_date datetime,
+	Modified_date datetime
+)
+
+
+drop table if exists Dim_Agency;
+create table Dim_Agency(
+	Agency_sk int identity(1,1) primary key,
+	Alternate_agency_id nvarchar(6),
+	Agency_code nvarchar(5),
+	Agency_name nvarchar(50),
+	Insert_date datetime,
+	Modified_date datetime 
+	)
+
+
+
+drop table if exists Dim_Aircraft_Data;
+create table Dim_Aircraft_Data(
+	Aircraft_sk int identity(1,1) primary key,
+	Alternate_adshex nvarchar(10) ,
+	N_number nvarchar(20) ,
+	Year_mfr nvarchar(4) ,
+	Serial_Number nvarchar(20),
+	Model_No nvarchar(20),
+	Mfr_mdl_code int ,
+	Manufact_key int foreign key references Dim_Manufact(manufact_sk),
+	Type_key int foreign key references Dim_Aircraft_Type(Aircraft_type_sk),
+	Registant_key int foreign key references Dim_Registant(Registant_sk),
+	StartDate datetime,
+	End_date datetime ,
+	Insert_date datetime ,
+	Modified_date datetime 
+)
+
+
+drop table if exists Dim_Aircraft_Type;
+create table Dim_Aircraft_Type(
+	Aircraft_type_sk int identity(1,1) primary key,
+	Alternate_type_id nvarchar(8),
+	TypeName nvarchar(50),
+	Insert_date datetime,
+	Modified_date datetime,
+
+)
+
+
+drop table if exists Dim_Manufact;
+create table Dim_Manufact(
+	manufact_sk int identity(1,1) primary key,
+	alternate_manufact_id nvarchar(8),
+	manufact_name nvarchar(50),
+	insert_date datetime,
+	modified_date datetime,
+
+)
+
+drop table if exists Dim_Registant;
+create table Dim_Registant(
+	Registant_sk int identity(1,1) primary key ,
+	Alternate_Registant_id nvarchar(6) ,
+	Registant_Name nvarchar(60) ,
+	Other_name1 nvarchar(60),
+	Other_name2 nvarchar(60),
+	Address nvarchar(100),
+	Street nvarchar(60),
+	Postal_code nvarchar(20),
+	City nvarchar(50),
+	Country nvarchar(10),
+	StartDate datetime,
+	End_date datetime ,
+	Insert_date datetime,
+	Modified_date datetime,
+
+)
+

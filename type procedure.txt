@@ -1,0 +1,67 @@
+CREATE PROCEDURE [dbo].[UpdateDim_Aircraft_type]
+@type_name varchar(50),
+@type_id varchar(50)
+
+AS
+BEGIN
+if not exists (
+select Aircraft_type_sk
+from dbo.Dim_AircraftType
+where Alternate_type_id = @type_id
+)
+
+BEGIN
+insert into dbo.Dim_AircraftType(Alternate_type_id , TypeName, Insert_date,Modified_date)
+values(@type_id, @type_name, GETDATE(), GETDATE())
+END;
+
+if exists (
+select Aircraft_type_sk
+from dbo.Dim_AircraftType
+where Alternate_type_id = @type_id
+)
+
+BEGIN
+update dbo.Dim_AircraftType
+set TypeName = @type_name,
+Modified_date = GETDATE()
+where Alternate_type_id = @type_id
+END;
+END;
+
+
+
+
+-----------------------------------------------------------------------------------
+
+CREATE PROCEDURE [dbo].[UpdateDim_Aircraft_Manufact]
+@manufact_name nvarchar(50),
+@manufact_id nvarchar(6)
+
+AS
+BEGIN
+if not exists (
+select manufact_sk
+from dbo.Dim_Manufact
+where alternate_manufact_id = @manufact_id
+)
+
+
+BEGIN
+insert into dbo.Dim_Manufact(alternate_manufact_id ,manufact_name, insert_date, modified_date)
+values( @manufact_id, @manufact_name, GETDATE(), GETDATE())
+END;
+
+if exists (
+select manufact_sk
+from dbo.Dim_Manufact
+where alternate_manufact_id = @manufact_id
+)
+
+BEGIN
+update dbo.Dim_Manufact
+set manufact_name = @manufact_name,
+modified_date = GETDATE()
+where alternate_manufact_id = @manufact_id
+END;
+END;
